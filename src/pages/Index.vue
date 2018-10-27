@@ -3,13 +3,12 @@
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
-        <q-datetime v-model="date1" placeholder="Дата туда" class="mb-3" type="date" />
-        <q-datetime v-model="date2" placeholder="Дата оттуда" class="mb-3" type="date" />
+        <q-datetime v-model="date" placeholder="Дата туда" class="mb-3" type="date" />
         <q-stepper-navigation>
           <q-btn
             class="mb-3"
             color="primary"
-            @click="currentStep = 'second'"
+            @click="dateRange"
             label="Ввести дату"
           />
         </q-stepper-navigation>
@@ -55,8 +54,13 @@ export default {
   data () {
     return {
       currentStep: 'first',
-      date1: '',
-      date2: ''
+      date: ''
+    }
+  },
+  methods: {
+    dateRange () {
+      this.currentStep = 'second';
+
     }
   }
 }
