@@ -34,8 +34,15 @@
         </q-stepper-navigation>
       </q-step>
 
-      <q-step name="second4" title="">
-        3
+      <q-step name="second4" title="Выбор визы">
+
+        <q-select
+          class="mb-3"
+          v-model="select"
+          float-label="Выберите визу"
+          :options="selectOptions"
+        />
+
         <q-stepper-navigation>
           <q-btn
             color="primary"
@@ -66,6 +73,16 @@
     data() {
       return {
         currentStep: 'first',
+        selectOptions: [
+          {
+            label: 'Google',
+            value: 'goog'
+          },
+          {
+            label: 'Facebook',
+            value: 'fb'
+          }
+        ],
         date: ''
       }
     },
