@@ -21,8 +21,8 @@
 
       <q-step name="second2" title="Время пребывания в стране">
         <p>Сколько Вы будите в Великобритании?</p>
-        <q-btn @click="currentStep = 'second3'" class="mb-3" color="positive" label="Меньше 6 месяцев"/>
-        <q-btn @click="currentStep = 'second3'" color="secondary" label="Больше 6 месяцев"/>
+        <q-btn @click="handleThirdStep(0)" class="mb-3" color="positive" label="Меньше 6 месяцев"/>
+        <q-btn @click="handleThirdStep(1)" color="secondary" label="Больше 6 месяцев"/>
       </q-step>
 
       <q-step name="second3" title="Определяемся с типом визы">
@@ -56,7 +56,7 @@
         <q-stepper-navigation>
           <q-btn
             color="primary"
-            @click="currentStep = 'first'"
+            @click="getReportAction"
             label="Получить отчёт"
           />
 
@@ -79,6 +79,9 @@
 </style>
 
 <script>
+
+import axios from 'axios';
+
   export default {
     name: 'PageIndex',
     data() {
@@ -112,6 +115,8 @@
         ],
         date: '',
         selected: 'fb5',
+        loading: false,
+        isMoreThanSixMonth: 0,
         message: null
       }
     },
@@ -119,6 +124,10 @@
       dateRange() {
         this.currentStep = 'second2'
         this.message = null;
+      },
+      handleThirdStep(isMoreThanSixMonth) {
+        this.currentStep = 'second3';
+        this.isMoreThanSixMonth = isMoreThanSixMonth;
       },
       onDateSelect() {
         var today = new Date()
@@ -145,6 +154,19 @@
         if (diffNum >= 135) {
           this.message = oneMess;
         }
+      },
+
+      getReportAction() {
+        console.log('sending');
+        const getData = {
+          entryDate: this.date.substring(0,10),
+          isMoreThanSixMonth: this.isMoreThanSixMonth, 
+          visaType: this.selected 
+        };
+        this.loading = true;
+        axios.get('http://example.com/foo', { params: getData }).then(res => {
+          console.log('response', res.data);
+        })
       }
 
     }
