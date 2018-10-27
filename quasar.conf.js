@@ -40,6 +40,11 @@ module.exports = function (ctx) {
     // framework: 'all' --- includes everything; for dev only!
     framework: {
       components: [
+        'QDatetime',
+        'QDatetimePicker',
+        'QStepper',
+        'QStep',
+        'QStepperNavigation',
         'QLayout',
         'QLayoutHeader',
         'QLayoutDrawer',
