@@ -3,10 +3,11 @@
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
-        <q-datetime v-model="model" placeholder="Дата туда" class="mb-3" type="date" />
-        <q-datetime v-model="model" placeholder="Дата оттуда" type="date" />
+        <q-datetime v-model="date1" placeholder="Дата туда" class="mb-3" type="date" />
+        <q-datetime v-model="date2" placeholder="Дата оттуда" class="mb-3" type="date" />
         <q-stepper-navigation>
           <q-btn
+            class="mb-3"
             color="primary"
             @click="currentStep = 'second'"
             label="Ввести дату"
@@ -38,7 +39,7 @@
   </q-page>
 </template>
 
-<style>
+<style scoped>
   .q-stepper{
     width: 100%;
     margin: 3%;
@@ -53,8 +54,9 @@ export default {
   name: 'PageIndex',
   data () {
     return {
-      // we initialize it with first step's name
-      currentStep: 'first'
+      currentStep: 'first',
+      date1: '',
+      date2: ''
     }
   }
 }
