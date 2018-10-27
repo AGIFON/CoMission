@@ -59,8 +59,7 @@ export default {
   },
   methods: {
     dateRange () {
-      this.currentStep = 'second';
-
+      this.currentStep = 'second'
     }
   }
 }
