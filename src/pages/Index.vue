@@ -3,7 +3,7 @@
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
-        <q-datetime v-model="date" placeholder="Дата туда" class="mb-3" type="date" />
+        <q-datetime v-model="date" placeholder="Дата туда" class="mb-3" type="date"/>
         <q-stepper-navigation>
           <q-btn
             class="mb-3"
@@ -14,17 +14,27 @@
         </q-stepper-navigation>
       </q-step>
 
-      <q-step name="second" title="второй">
-        2
+      <q-step name="second2" title="Цель поездки">
+        <p>Сколько Вы будите в Великобритании?</p>
+        <q-btn @click="currentStep = 'second3'" class="mb-3" color="positive" label="Меньше 6 месяцев" />
+        <q-btn  @click="currentStep = 'second3'" color="secondary" label="Больше 6 месяцев" />
+
+      </q-step>
+
+      <q-step name="second3" title="Цель поездки">
+
+        <p class="mb-3">Определите тип визы по <a target="_blank" href="https://www.gov.uk/check-uk-visa/y">ссылке</a> :</p>
         <q-stepper-navigation>
           <q-btn
+            class="mb-3"
             color="primary"
-            @click="currentStep = 'second2'"
-            label="Go Back"
+            @click="currentStep = 'second4'"
+            label="Далее"
           />
         </q-stepper-navigation>
       </q-step>
-      <q-step name="second2" title="">
+
+      <q-step name="second4" title="">
         3
         <q-stepper-navigation>
           <q-btn
@@ -34,33 +44,35 @@
           />
         </q-stepper-navigation>
       </q-step>
+
     </q-stepper>
   </q-page>
 </template>
 
 <style scoped>
-  .q-stepper{
+  .q-stepper {
     width: 100%;
     margin: 3%;
   }
-  .mb-3{
+
+  .mb-3 {
     margin-bottom: 10px;
   }
 </style>
 
 <script>
-export default {
-  name: 'PageIndex',
-  data () {
-    return {
-      currentStep: 'first',
-      date: ''
-    }
-  },
-  methods: {
-    dateRange () {
-      this.currentStep = 'second'
+  export default {
+    name: 'PageIndex',
+    data() {
+      return {
+        currentStep: 'first',
+        date: ''
+      }
+    },
+    methods: {
+      dateRange() {
+        this.currentStep = 'second2'
+      }
     }
   }
-}
 </script>
