@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <q-stepper v-model="currentStep">
+    <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
         <q-datetime v-model="model" placeholder="Дата туда" class="mb-3" type="date" />
@@ -39,6 +39,13 @@
 </template>
 
 <style>
+  .q-stepper{
+    width: 100%;
+    margin: 3%;
+  }
+  .mb-3{
+    margin-bottom: 10px;
+  }
 </style>
 
 <script>
