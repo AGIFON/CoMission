@@ -7,7 +7,7 @@
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
-        <q-datetime v-model="date" @change="onDateSelect" placeholder="Дата туда" class="mb-3" type="date"/>
+        <q-datetime v-model="date" min="new Date()" @change="onDateSelect" placeholder="Дата туда" class="mb-3" type="date"/>
         <q-stepper-navigation>
           <q-btn
             class="mb-3"
