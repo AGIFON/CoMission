@@ -7,7 +7,7 @@
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
-        <q-datetime v-model="date" min="new Date()" @change="onDateSelect" placeholder="Дата туда" class="mb-3" type="date"/>
+        <q-datetime v-model="date" @change="onDateSelect" placeholder="Дата туда" class="mb-3" type="date"/>
         <q-stepper-navigation>
           <q-btn
             class="mb-3"
@@ -47,6 +47,7 @@
 
         <q-select
           class="mb-3"
+          filter
           v-model="select"
           float-label="Выберите визу"
           :options="selectOptions"
@@ -56,7 +57,7 @@
           <q-btn
             color="primary"
             @click="currentStep = 'first'"
-            label="Go Back"
+            label="Получить отчёт"
           />
 
         </q-stepper-navigation>
@@ -91,6 +92,22 @@
           {
             label: 'Facebook',
             value: 'fb'
+          },
+          {
+            label: 'twit',
+            value: 'fb'
+          },
+          {
+            label: 'face',
+            value: 'fb'
+          },
+          {
+            label: 'book',
+            value: 'fb'
+          },
+          {
+            label: 'lab',
+            value: 'fb'
           }
         ],
         date: '',
@@ -111,7 +128,11 @@
         const secondMess = 'Обычно весь процесс получения визы занимает 1,5 месяца, вы прекрасно успеваете' // меньше 135 дней, больше 45 дней
         const thirdMess = 'Чуть сжатые сроки. Нужно будет заплатить консультационный сбор и услуги prime time' // от 35 до 45 дней
         const fourthMess = 'Сильно сжатые сроки. Поэтому нужно заплатить консультацинный сбор Priority Service' //  меньше 35 дней
-        if (diffNum < 35) {
+        const fiveMess = 'Слишком короткий срок , вы не сможете получить визу в срок ' // меньше 10
+        if(diffNum < 10){
+          this.message = fiveMess;
+        }
+        if (diffNum < 35 && diffNum > 10) {
           this.message = fourthMess;
         }
         if (diffNum >= 35 && diffNum < 45) {
