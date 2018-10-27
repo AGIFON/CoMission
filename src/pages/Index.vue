@@ -48,7 +48,7 @@
         <q-select
           class="mb-3"
           filter
-          v-model="select"
+          v-model="selected"
           float-label="Выберите визу"
           :options="selectOptions"
         />
@@ -86,31 +86,32 @@
         currentStep: 'first',
         selectOptions: [
           {
-            label: 'Google',
+            label: 'b-1',
             value: 'goog'
           },
           {
-            label: 'Facebook',
-            value: 'fb'
+            label: 'b-2',
+            value: 'fb1'
           },
           {
-            label: 'twit',
-            value: 'fb'
+            label: 'b-3',
+            value: 'fb2'
           },
           {
-            label: 'face',
-            value: 'fb'
+            label: 'j-1',
+            value: 'fb3'
           },
           {
-            label: 'book',
-            value: 'fb'
+            label: 'j-2',
+            value: 'fb4'
           },
           {
-            label: 'lab',
-            value: 'fb'
+            label: 'j-3',
+            value: 'fb5'
           }
         ],
         date: '',
+        selected: 'fb5',
         message: null
       }
     },
