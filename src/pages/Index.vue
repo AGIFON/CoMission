@@ -82,6 +82,13 @@
 
 import axios from 'axios';
 
+function encodeQueryData(data) {
+   const ret = [];
+   for (let d in data)
+     ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+   return ret.join('&');
+}
+
   export default {
     name: 'PageIndex',
     data() {
@@ -163,10 +170,12 @@ import axios from 'axios';
           isMoreThanSixMonth: this.isMoreThanSixMonth, 
           visaType: this.selected 
         };
+        const queryString = encodeQueryData(getData);
+        window.open('http://example.com/foo?' + queryString, '_blank');
         this.loading = true;
-        axios.get('http://example.com/foo', { params: getData }).then(res => {
-          console.log('response', res.data);
-        })
+     //   axios.get('http://example.com/foo', { params: getData }).then(res => {
+     //     console.log('response', res.data);
+     //   })
       }
 
     }
