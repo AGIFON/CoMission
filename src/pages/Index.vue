@@ -1,12 +1,12 @@
 <template>
   <q-page class="flex flex-center">
-    <q-alert v-if="this.message" color="info">
-      {{ this.message }}
-    </q-alert>
 
     <q-stepper vertical v-model="currentStep">
       <q-step name="first" title="Выбор дат">
         <p>Выберите предпологаемую дату поездки</p>
+    <q-alert v-if="this.message" color="warning">
+      {{ this.message }}
+    </q-alert>
         <q-datetime v-model="date" @change="onDateSelect" placeholder="Дата туда" class="mb-3" type="date"/>
         <q-stepper-navigation>
           <q-btn
@@ -52,6 +52,31 @@
           float-label="Выберите визу"
           :options="selectOptions"
         />
+        <p v-if="showMoneyBlock()">
+          Нужно показать, что у Вас есть деньги, в том числе на поездку (1500 долларов США). Нет денег? Вот <a target="_blank" href="https://docs.google.com/document/d/1BwxPmn80mwfItDtumLwrBkHVY2f58QkhT7tR8pZ3FcQ/edit?usp=sharing">несколько советов</a>. 
+        </p>
+
+        <q-stepper-navigation>
+          <q-btn
+            color="primary"
+            @click="currentStep = 'second5'"
+            label="Далее"
+          />
+
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step name="second5" title="Вы кто?">
+
+        <q-select
+          class="mb-3"
+          v-model="occupation"
+          float-label="Ваша занятость"
+          :options="getOccupationList()"
+        />
+        <p v-if="occupation">
+          {{ this.showOccupationBlock() }} 
+        </p>
 
         <q-stepper-navigation>
           <q-btn
@@ -61,8 +86,9 @@
           />
 
         </q-stepper-navigation>
+      <q-spinner v-if="this.loading" size="60px" />
+      <a v-if="this.showLink" target="_blank" style="font-size: 160%" href="#">Скачать PDF</a>
       </q-step>
-
     </q-stepper>
   </q-page>
 </template>
@@ -96,33 +122,31 @@ function encodeQueryData(data) {
         currentStep: 'first',
         selectOptions: [
           {
-            label: 'b-1',
-            value: 'goog'
+            label: 'Standart Visitor visa',
+            value: 'standartVisitor'
           },
           {
-            label: 'b-2',
-            value: 'fb1'
+            label: 'Short-term study visa',
+            value: 'shortTermStudy'
           },
           {
-            label: 'b-3',
-            value: 'fb2'
+            label: 'Marriage Visitor visa',
+            value: 'marriageVisitor'
           },
           {
-            label: 'j-1',
-            value: 'fb3'
+            label: 'Direct Airside Transit visa (DATV)',
+            value: 'datv'
           },
           {
-            label: 'j-2',
-            value: 'fb4'
-          },
-          {
-            label: 'j-3',
-            value: 'fb5'
+            label: 'Visitor in Transit visa',
+            value: 'visitorInTransit'
           }
         ],
         date: '',
-        selected: 'fb5',
+        selected: null,
+        occupation: null,
         loading: false,
+        showLink: false,
         isMoreThanSixMonth: 0,
         message: null
       }
@@ -131,6 +155,46 @@ function encodeQueryData(data) {
       dateRange() {
         this.currentStep = 'second2'
         this.message = null;
+      },
+      getOccupationList() {
+        return [
+          { label: 'Наемный работчий', value: 'employee' },
+          { label: 'Пенсионер', value: 'retiree' },
+          { label: 'Студент', value: 'student' },
+          { label: 'Владелец бизнеса', value: 'businessman' },
+          { label: 'ИП', value: 'ip' }
+        ]
+      },
+      showMoneyBlock () {
+        switch (this.selected) {
+            case 'standartVisitor':
+            case 'shortTermStudy':
+            case 'marriageVisitor':
+              return true;
+            default:
+              return false;
+        }
+      },
+      showOccupationBlock() {
+        const employeeText = '→Ваша доход больше 1000 рублей в месяц?  Да → Возьмите справку от работодателя с указанием даты начала работы, зарплаты, роли, контактных данных компании.  Агентства визовой поддержки советуют брать справку о зарплате за последние 6 месяцев, расписанной помесячно с указанием занимаемой должности и дате начала работы в компании.  •  Нет → Сама по себе невысокая зарплата – не повод получения отказа в визе. «Но если вы получаете 600 рублей в месяц и за 5 лет ездили только в Литву и Швецию, к примеру (о чем «расскажут» отметки в паспорте. – Прим. авт.), то вероятность отказа повышается», – отмечают консультанты Агентства визовой поддержки Visavisa.by.  Привлечь в качестве спонсора супруга или родителей и, опять же предъявить посольству справку о зарплате и/или справку из банка о движении средств по счету с достаточной итоговой суммой, ксерокопии свидетельства о браке или паспорта спонсора (см. как оформлять ксерокопии в статье «Заверение ксерокопий»).';
+        const retireeText = 'Пенсионерам понадобятся копия пенсионного удостоверения, оригинал выписки из банка о начислении пенсии за последние 6 месяцев, сообщают в “Homo Touristus”.';
+        const studentText = 'Подготовьте документы о том, что вы трудоустроены или обучаетесь на дневной форме.\n\n  Справку от работодателя на фирменном бланке с подробностями о вашей зарплате, роли в компании и продолжительности работы. \n\n Показывайте заплату за последние 6 месяцев, рекомендуют в агентствах. \n\n Письмо из учреждения образования на фирменном бланке, что являетесь студентом дневной формы обучения, с подтверждением предоставления отпуска на период предполагаемой поездки. \n\n   Туристическая компания “Homo Touristus” советует еще сделать копии студенческого билета и всех заполненных страниц зачетной книжки.';
+        const businessmanText = 'Документы о регистрации бизнеса с указанием имени владельца и датой регистрации – в случае самозанятости. Кроме того, сообщают в “Homo Touristus”, нужны: оригинал справки о полученных дивидендах за полгода-год (для владельцев бизнеса).';
+        const ipText = 'Для индивидуальных предпринимателей это свидетельство о регистрации, для владельцев бизнеса – копия устава предприятия (страницы с печатями, данными о владельцах, долях) и копия свидетельства о государственной регистрации предприятия, сообщают в компании “Homo Touristus”. Кроме того, сообщают в “Homo Touristus”, нужны: оригинал справки из банка о движении средств  по счету за 6 месяцев и финальном положительном балансе на счету.';
+        switch(this.occupation) {
+          case 'employee':
+             return employeeText;
+          case 'retiree':
+            return retireeText;
+          case 'student':
+            return studentText;
+          case 'businessman':
+            return businessmanText;
+          case 'ip':
+            return ipText;
+          default:
+            return '';
+        }
       },
       handleThirdStep(isMoreThanSixMonth) {
         this.currentStep = 'second3';
@@ -165,17 +229,20 @@ function encodeQueryData(data) {
 
       getReportAction() {
         console.log('sending');
-        const getData = {
-          entryDate: this.date.substring(0,10),
-          isMoreThanSixMonth: this.isMoreThanSixMonth, 
-          visaType: this.selected 
-        };
-        const queryString = encodeQueryData(getData);
-        window.open('http://example.com/foo?' + queryString, '_blank');
+    //    const getData = {
+    //      entryDate: this.date.substring(0,10),
+    //      isMoreThanSixMonth: this.isMoreThanSixMonth, 
+    //      visaType: this.selected 
+    //    };
+    //    const queryString = encodeQueryData(getData);
+    //    window.open('http://example.com/foo?' + queryString, '_blank');
         this.loading = true;
-     //   axios.get('http://example.com/foo', { params: getData }).then(res => {
-     //     console.log('response', res.data);
-     //   })
+        this.showLink = false;
+        setTimeout(() => {
+          this.loading = false;
+          this.showLink = true;
+        }, 2000)
+
       }
 
     }

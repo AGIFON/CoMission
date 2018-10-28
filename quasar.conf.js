@@ -41,6 +41,8 @@ module.exports = function (ctx) {
     framework: {
       components: [
         'QAlert',
+        'QSpinner',
+        'QSpinnerAudio',
         'QSelect',
         'QDatetime',
         'QDatetimePicker',
